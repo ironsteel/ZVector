@@ -124,13 +124,11 @@ void Group::draw(bool skipColor = false)
 	
 }
 
-void Group::translate(double x, double y)
-{
-	Shape::translate(x, y);
-}
+
 
 void Group::rotate(double angle)
 {
+	
 	QVector2D center = getCenter();	
         QLinkedList<Shape*>::iterator sit = m_shapes.begin();
         while( sit != m_shapes.end())

@@ -53,8 +53,7 @@ public:
 
         virtual void resize( double x, double y );
         void draw(bool skipColor);
-	
-	void translate(double x, double y);
+
 	
 	void rotate(double angle);
 	
@@ -80,6 +79,7 @@ protected:
 	void deleteShapes();
 	
 	QVector2D rotationCenter;
+	
 
 };
 

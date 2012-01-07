@@ -147,6 +147,7 @@ void GLCanvas::rotateShapeByAngle(int angle)
 void GLCanvas::groupSelectedShapes()
 {
         m_groupManager->groupSelected();
+	flush();
 }
 
 void GLCanvas::applyViewportTransform()

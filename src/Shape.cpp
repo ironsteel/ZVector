@@ -46,6 +46,7 @@ void Shape::translate( double x, double y )
 
 void Shape::rotate(double  angle)
 {
+	
         m_rotationAngle = angle;
         double radians = angle * DEG2RAD;
         double* m = m_mat.data();
@@ -318,7 +319,7 @@ void Shape::rotateAround(double angle, QVector2D point)
 	      QMatrix4x4 mat;
 	      double* m_mat_data = m_mat.data();
         double* m = mat.data();
-        double radians = (m_rotationAngle - angle) * DEG2RAD ;
+        double radians = (angle - m_rotationAngle) * DEG2RAD ;
 
         m[0] = cos(radians);
         m[1] = -sin(radians);
