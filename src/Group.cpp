@@ -102,6 +102,7 @@ void Group::getBoundingBox4dv(QVector3D* bounds)
 
 void Group::draw(bool skipColor = false)
 {
+	double *mat = m_mat.data();
         glPushMatrix();
         glMultMatrixd(m_mat.constData());
         if(m_shapes.size())
@@ -112,10 +113,15 @@ void Group::draw(bool skipColor = false)
                         (*sit)->draw(skipColor);
                         sit++;
                 }
+		
 
 
         }
         glPopMatrix();
+	glPointSize(13);
+	glBegin(GL_POINTS);
+	glVertex2d(mat[12], mat[13]);
+	glEnd();
 
 }
 
@@ -192,12 +198,18 @@ void Group::recalculateCenter()
         getBoundingBox4dv(bounds);
 
 
-        center.setX((bounds[1].x() - bounds[0].x())/2);
-        center.setY((bounds[1].y() - bounds[0].y())/2);
-
+        center.setX((bounds[1].x() - bounds[0].x())/2 +bounds[0].x());
+        center.setY((bounds[1].y() - bounds[0].y())/2 + bounds[0].y());
+	
         translate(center.x() - m[12], center.y() - m[13]);
-        m[12] -= center.x();
-	m[13] -= center.y();
+        m[12] = center.x();
+	m[13] = center.y();
+	QLinkedList<Shape*>::iterator sit = m_shapes.begin();
+        while( sit != m_shapes.end())
+        {
+		(*sit)->translate(-m[12], -m[13]);
+                sit++;
+        }
 	
 }
 
