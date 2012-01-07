@@ -31,8 +31,8 @@
 GroupManager::GroupManager()
 {
         m_shapes.append(new Group());
-        m_shapes.append(new Handler());
-        m_handler = (Handler*)m_shapes[1];
+        m_shapes.append(m_rotHandler = new RotateHandler());
+        m_shapes.append(m_moveHandler = new MoveHandler());
         m_currentShape = 0;
         m_zoomFactor = 1;
 }
@@ -58,10 +58,8 @@ void GroupManager::setCurrentShape(int index)
         }
         else
         {
-                if(index == 1)
-                {
-                        m_handler->setShape(m_shapes[m_currentShape]);
-                }
+                m_moveHandler->setShape(m_shapes[m_currentShape]);
+                m_rotHandler->setShape(m_shapes[m_currentShape]);
                 m_currentShape = index;
                 if(!m_selectionGroup.contains(index))
                 {
@@ -98,7 +96,6 @@ void GroupManager::popShape(unsigned int index)
                ++it;
                ++position;
        }
-
 }
 
 void GroupManager::addToSelection(int index)
@@ -140,8 +137,10 @@ void GroupManager::draw()
         {
                 QVector3D bb[2];
                 m_shapes[m_currentShape]->getBoundingBox4dv(bb);
-                m_handler->setPosition(bb[1].x(), bb[1].y());
-                m_handler->draw(false);
+                m_moveHandler->setPosition(bb[1].x(), bb[1].y());
+                m_moveHandler->draw(false);
+                m_rotHandler->setPosition(bb[1].x(), bb[1].y());
+                m_rotHandler->draw(false);
         }
         m_selectionGroup.draw(false);
 }
@@ -256,7 +255,7 @@ void GroupManager::saveToFile(std::string filename)
                 throw "Cannot Save To File!";
         }
 
-        QList<Shape*>::iterator it = m_shapes.begin() + 2;
+        QList<Shape*>::iterator it = m_shapes.begin() + 3;
         while( it != m_shapes.end())
         {
                 if((*it) != NULL) {

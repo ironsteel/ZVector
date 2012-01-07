@@ -51,6 +51,9 @@ public:
 	
 	virtual void applyTransform(QMatrix4x4& transform);
 
+        virtual void setSize(double,double);
+        virtual QVector2D getSize();
+
 	virtual void translate( double x, double y );
 	virtual void rotate( double angle );
 	virtual void setFillColor(double r, double g, double b);
@@ -73,7 +76,10 @@ public:
         virtual double getRotationAngle();
         virtual void getBoundingBox4dv(QVector3D* b);
         virtual void drawBoundingBox(QVector3D* b);
-        virtual QVector2D getSize();
+	
+	virtual QVector2D getCenter();
+	
+	virtual void rotateAround(double angle, QVector2D point);
 
         int getIndex();
         void setIndex(int index);

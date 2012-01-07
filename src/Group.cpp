@@ -115,14 +115,22 @@ void Group::draw(bool skipColor = false)
                 }
 		
 
-
         }
         glPopMatrix();
 	glPointSize(13);
 	glBegin(GL_POINTS);
 	glVertex2d(mat[12], mat[13]);
 	glEnd();
+	
+}
 
+
+
+
+void Group::rotate(double angle)
+{
+	
+	Shape::rotate(angle);
 }
 
 void Group::setFillColorOpacity(double alpha)
@@ -200,6 +208,7 @@ void Group::recalculateCenter()
 
         center.setX((bounds[1].x() - bounds[0].x())/2 +bounds[0].x());
         center.setY((bounds[1].y() - bounds[0].y())/2 + bounds[0].y());
+
 	
         translate(center.x() - m[12], center.y() - m[13]);
         m[12] = center.x();
@@ -211,6 +220,14 @@ void Group::recalculateCenter()
                 sit++;
         }
 	
+	rotationCenter.setX((bounds[1].x() - bounds[0].x())/2 + bounds[0].x());
+	rotationCenter.setY((bounds[1].y() - bounds[0].y())/2 + bounds[0].y());
+	
+}
+
+QVector2D Group::getCenter()
+{
+	return rotationCenter;
 }
 
 std::string Group::toString()
@@ -229,5 +246,6 @@ std::string Group::toString()
 	
 	return serialized.str();
 }
+
 
 

@@ -179,6 +179,9 @@ void QDrawMainWindow::updateWidgetsForSelectedShape(Shape* shape)
         }
         ui->angleSpinbox->setValue(shape->getRotationAngle());
         ui->outline_width->setValue(shape->getContourWidth());
+        QVector2D size = shape->getSize();
+        ui->width->setValue(size.x());
+        ui->height->setValue(size.y());
 
         if(AutoShape* autoShape = dynamic_cast<AutoShape*>(shape))
         {
@@ -256,7 +259,6 @@ void QDrawMainWindow::on_pushShapeBack_clicked()
                 GLCanvas* activeCanvas = (GLCanvas*)wnd->widget();
                 activeCanvas->pushCurrentShapeBack();
                 activeCanvas->flush();
-
         }
 }
 
@@ -334,4 +336,32 @@ void QDrawMainWindow::on_actionOpen_triggered()
         }
 }
 
+void QDrawMainWindow::on_width_valueChanged(double x)
+{
+        if(GLCanvas* canvas = getActiveCanvas())
+        {
+                canvas->getCurrentShape()->setSize(x,0);
+                canvas->flush();
+        }
+}
 
+void QDrawMainWindow::on_height_valueChanged(double y)
+{
+        if(GLCanvas* canvas = getActiveCanvas())
+        {
+                canvas->getCurrentShape()->setSize(0,y);
+                canvas->flush();
+        }
+}
+
+GLCanvas * QDrawMainWindow::getActiveCanvas()
+{
+        if(QMdiSubWindow* wnd = ui->mdiArea->activeSubWindow())
+        {
+                if(GLCanvas* activeCanvas = (GLCanvas*)wnd->widget())
+                {
+                        return activeCanvas;
+                }
+        }
+        return NULL;
+}

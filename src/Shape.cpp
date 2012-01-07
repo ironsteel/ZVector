@@ -46,6 +46,7 @@ void Shape::translate( double x, double y )
 
 void Shape::rotate(double  angle)
 {
+	
         m_rotationAngle = angle;
         double radians = angle * DEG2RAD;
         double* m = m_mat.data();
@@ -90,7 +91,7 @@ void Shape::setFillColor(const QColor& color)
 	m_fillColor[0] = color.redF();
 	m_fillColor[1] = color.greenF();
 	m_fillColor[2] = color.blueF();
-        m_fillColor[3] = color.alphaF();
+//        m_fillColor[3] = color.alphaF();
 }
 
 void Shape::setContourColor(const QColor& color)
@@ -98,7 +99,7 @@ void Shape::setContourColor(const QColor& color)
 	m_contourColor[0] = color.redF();
 	m_contourColor[1] = color.greenF();
 	m_contourColor[2] = color.blueF();
-        m_contourColor[3] = color.alphaF();
+//        m_contourColor[3] = color.alphaF();
 }
 
 QColor Shape::getFillColor()
@@ -270,7 +271,6 @@ std::string Shape::toString()
                     << m_rotationAngle;
 
         return serialized.str();
-
 }
 
 QVector2D Shape::getSize()
@@ -284,6 +284,53 @@ QVector2D Shape::getSize()
         size.setY(size_y);
 
         return size;
+}
 
+void Shape::setSize(double x, double y)
+{
+        QVector2D size = getSize();
+        double diff_x = 0, diff_y = 0;
+        if(x)
+        {
+                diff_x = x - size.x();
+        }
+        if(y)
+        {
+                diff_y = y - size.y();
+        }
+
+        resize(diff_x, diff_y);
+}
+
+QVector2D Shape::getCenter()
+{	
+	
+	QVector2D center;
+	double* m_mat_data = m_mat.data();
+	
+	center.setX(m_mat_data[12]);
+        center.setY(m_mat_data[13]);
+	
+	return center;
+}
+
+void Shape::rotateAround(double angle, QVector2D point)
+{
+	      QMatrix4x4 mat;
+	      double* m_mat_data = m_mat.data();
+        double* m = mat.data();
+        double radians = (angle - m_rotationAngle) * DEG2RAD ;
+
+        m[0] = cos(radians);
+        m[1] = -sin(radians);
+        m[4] = sin(radians);
+        m[5] = cos(radians);
+        m_mat_data[12] -= point.x();
+        m_mat_data[13] -= point.y();
+
+        m_mat = mat * m_mat;
+        m_mat_data[12] += point.x();
+        m_mat_data[13] += point.y();
+        m_rotationAngle = angle;
 
 }

@@ -44,8 +44,7 @@ public:
 	virtual ~Group()
 	{
 		deleteShapes();
-	}
-	
+        }
 
 	void addShape( Shape* shape);
 	void applyTransformToChildren();
@@ -55,6 +54,9 @@ public:
         virtual void resize( double x, double y );
         void draw(bool skipColor);
 
+	
+	void rotate(double angle);
+	
         virtual void setFillColor(const QColor& color);
         virtual void setContourColor(const QColor& color);
 
@@ -67,12 +69,17 @@ public:
 
         void recalculateCenter();
 	
+	QVector2D getCenter();
+	
         std::string toString();
 
 protected:
 	QLinkedList<Shape*> m_shapes;
 
 	void deleteShapes();
+	
+	QVector2D rotationCenter;
+	
 
 };
 
